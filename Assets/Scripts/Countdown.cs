@@ -8,20 +8,13 @@ public class Countdown : MonoBehaviour
 	public float currentTime = 0f; 
 	public float startingTime = 7200f;
 	public bool showTimer = true;
-	public TimerFormats format;
 
 	[SerializeField] TextMeshProUGUI countDownText;
-	private Dictionary<TimerFormats, string> timeFormats = new Dictionary<TimerFormats, string>();
 
     // Start is called before the first frame update
     void Start()
     {
-    	// countDownText.gameObject.SetActive(false);
-    	format = TimerFormats.TenthDecimal;
         currentTime = startingTime;
-        timeFormats.Add(TimerFormats.Whole, "0");
-        timeFormats.Add(TimerFormats.TenthDecimal, "0.0");
-        timeFormats.Add(TimerFormats.HundrethsDecimal, "0.00");
     }
 
     // Update is called once per frame
@@ -54,11 +47,5 @@ public class Countdown : MonoBehaviour
 
     	var s = $"{hours}:{minutes}:{seconds}";
     	return s;
-    }
-
-    public enum TimerFormats{
-    	Whole,
-    	TenthDecimal,
-    	HundrethsDecimal
     }
 }
