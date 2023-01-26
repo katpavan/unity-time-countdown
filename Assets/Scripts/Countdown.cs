@@ -3,21 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-/*
-
-2*60*60 = 7200 is two hours
-
-7000 % 3600 = 3400
-
-200 seconds = 3 minutes 20 seconds
-
-so it should show this for 7000 seconds
-1:56:40
-
-
-
-*/
-
 public class Countdown : MonoBehaviour
 {
 	public float currentTime = 0f; 
@@ -31,7 +16,7 @@ public class Countdown : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-    	countDownText.gameObject.SetActive(false);
+    	// countDownText.gameObject.SetActive(false);
     	format = TimerFormats.TenthDecimal;
         currentTime = startingTime;
         timeFormats.Add(TimerFormats.Whole, "0");
@@ -49,6 +34,8 @@ public class Countdown : MonoBehaviour
         if (currentTime <= 0){
         	currentTime = 0;
         	showTimer = false;
+        }else{
+        	showTimer = true;
         }
 
         if (!showTimer) {
@@ -56,6 +43,18 @@ public class Countdown : MonoBehaviour
         }else{
         	countDownText.gameObject.SetActive(true);
         }
+        Debug.Log(formatTime(currentTime));
+    }
+
+    public string formatTime(float ct)
+    {
+    	int hours = (int) ct / 3600;
+    	int minutes = (int) ct / 60; 
+    	minutes = minutes > 60 ? minutes - 60 : minutes;
+    	int seconds = (int) ct % 60;
+
+    	var s = $"{hours}:{minutes}:{seconds}";
+    	return s;
     }
 
     public enum TimerFormats{
