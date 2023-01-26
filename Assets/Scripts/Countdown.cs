@@ -29,7 +29,7 @@ public class Countdown : MonoBehaviour
     {
         currentTime -= 1 * Time.deltaTime;
         // print(currentTime);
-        countDownText.text = currentTime.ToString(timeFormats[format]); //shows whole numbers only
+        countDownText.text = formatTime(currentTime);
 
         if (currentTime <= 0){
         	currentTime = 0;
@@ -43,14 +43,13 @@ public class Countdown : MonoBehaviour
         }else{
         	countDownText.gameObject.SetActive(true);
         }
-        Debug.Log(formatTime(currentTime));
     }
 
     public string formatTime(float ct)
     {
     	int hours = (int) ct / 3600;
     	int minutes = (int) ct / 60; 
-    	minutes = minutes > 60 ? minutes - 60 : minutes;
+    	minutes = minutes > 60 ? minutes - 60 : minutes; //this works since it's a 2 hour gap
     	int seconds = (int) ct % 60;
 
     	var s = $"{hours}:{minutes}:{seconds}";
