@@ -3,6 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+/*
+
+1. show a button, click on it, store the timestamp of when it was clicked on
+2. make a heart score go up and display it whenever the button is clicked
+3. clicking on the button starts the timer
+4. you can only get points when the timer is done
+5. display a random message when you click the button 
+6. don't display the same message after clicking the button
+
+*/
+
 public class Countdown : MonoBehaviour
 {
 	public float currentTime = 0f; 
