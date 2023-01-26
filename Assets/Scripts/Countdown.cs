@@ -54,9 +54,11 @@ public class Countdown : MonoBehaviour
     	int hours = (int) ct / 3600;
     	int minutes = (int) ct / 60; 
     	minutes = minutes > 60 ? minutes - hours * 60 : minutes;
+    	var minutess = minutes < 10 ? $"0{minutes}" : minutes.ToString();
     	int seconds = (int) ct % 60;
+    	var secondss = seconds < 10 ? $"0{seconds}" : seconds.ToString();
 
-    	var s = $"{hours}:{minutes}:{seconds}";
+    	var s = $"{hours}:{minutess}:{secondss}";
     	return s;
     }
 }
