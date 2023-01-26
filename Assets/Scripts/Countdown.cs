@@ -49,7 +49,7 @@ public class Countdown : MonoBehaviour
     {
     	int hours = (int) ct / 3600;
     	int minutes = (int) ct / 60; 
-    	minutes = minutes > 60 ? minutes - 60 : minutes; //this works since it's a 2 hour gap
+    	minutes = minutes > 60 ? minutes - hours * 60 : minutes;
     	int seconds = (int) ct % 60;
 
     	var s = $"{hours}:{minutes}:{seconds}";
