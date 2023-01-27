@@ -1,3 +1,4 @@
+using System; //needed for DateTimeOffset and DateTime
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,10 +6,6 @@ using TMPro;
 
 /*
 
-1. show a button, click on it, store the timestamp of when it was clicked on
-2. make a heart score go up and display it whenever the button is clicked
-3. clicking on the button starts the timer
-4. you can only get points when the timer is done
 5. display a random message when you click the button 
 6. don't display the same message after clicking the button
 
@@ -17,36 +14,64 @@ using TMPro;
 public class Countdown : MonoBehaviour
 {
 	public float currentTime = 0f; 
-	public float startingTime = 7200f;
-	public bool showTimer = true;
+	public float startingTime = 5f;
+	public bool startTimer = false;
+	public long lastClicked;
+	public int affectionScore = 0;
+	public int clickCount = 0;
 
 	[SerializeField] TextMeshProUGUI countDownText;
+	[SerializeField] TextMeshProUGUI affectionScoreText;
 
     // Start is called before the first frame update
     void Start()
     {
+    	toggleCountdown();
         currentTime = startingTime;
     }
 
     // Update is called once per frame
     void Update()
     {
-        currentTime -= 1 * Time.deltaTime;
-        // print(currentTime);
-        countDownText.text = formatTime(currentTime);
 
-        if (currentTime <= 0){
-        	currentTime = 0;
-        	showTimer = false;
-        }else{
-        	showTimer = true;
-        }
+    	if (startTimer){
+    		currentTime -= 1 * Time.deltaTime;
+    		countDownText.text = formatTime(currentTime);
 
-        if (!showTimer) {
-        	countDownText.gameObject.SetActive(false);
-        }else{
-        	countDownText.gameObject.SetActive(true);
-        }
+    		if (currentTime <= 0){
+    			currentTime = 5;
+    		}
+    	}
+    }
+
+    public void bClick(){
+
+    	startTimer = true;
+    	toggleCountdown();
+
+    	var t = new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds();
+
+    	if (lastClicked == 0){
+    		lastClicked = t;
+    	}
+
+    	if ((t - lastClicked >= 5) || (clickCount == 0)){
+    		clickCount += 1;
+    		affectionScore += 2;
+    		lastClicked = t;
+    		affectionScoreText.text = affectionScore.ToString();
+    		Debug.Log(lastClicked);
+    	}
+
+    	
+    }
+
+    public void toggleCountdown(){
+    	if (!startTimer) {
+    		countDownText.gameObject.SetActive(false);
+    	}else{
+    		countDownText.gameObject.SetActive(true);
+    	}
     }
 
     public string formatTime(float ct)
