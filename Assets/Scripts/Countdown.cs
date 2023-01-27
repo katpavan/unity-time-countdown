@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-
 /*
 
 * the timer and button going red doesn't sync up
@@ -27,7 +26,6 @@ public class Countdown : MonoBehaviour
 	[SerializeField] TextMeshProUGUI affectionScoreText;
 	[SerializeField] TextMeshProUGUI phraseText;
 	[SerializeField] GameObject button;
-
 
     // Start is called before the first frame update
     void Start()
@@ -72,9 +70,6 @@ public class Countdown : MonoBehaviour
 
     public void bClick(){
 
-    	startTimer = true;
-    	toggleCountdown();
-
     	var t = new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds();
 
     	//phrase code start
@@ -89,11 +84,13 @@ public class Countdown : MonoBehaviour
     	phraseText.text = phrases[x];
     	//phrase code end
 
-    	if (lastClicked == 0){
-    		lastClicked = t;
-    	}
+    	var y = (t - lastClicked >= 5) || (clickCount == 0);
+    	var yx = y && (startTimer == false);
 
-    	if ((t - lastClicked >= 5) || (clickCount == 0)){
+    	if (yx){
+    		startTimer = true;
+    		toggleCountdown();
+
     		clickCount += 1;
     		affectionScore += 2;
     		lastClicked = t;
