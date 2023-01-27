@@ -2,13 +2,14 @@ using System; //needed for DateTimeOffset and DateTime
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
+
 
 /*
 
-* timer is restarting without clicking the button - that's not right
-* when you can get affection points, make the button a different color
-* when you can't get affection points, remove the color
+* the phrase doesn't update on click sometimes
+* the timer seems off, when it hits 0, the button turns red
 
 */
 
@@ -26,11 +27,15 @@ public class Countdown : MonoBehaviour
 	[SerializeField] TextMeshProUGUI countDownText;
 	[SerializeField] TextMeshProUGUI affectionScoreText;
 	[SerializeField] TextMeshProUGUI phraseText;
+	[SerializeField] GameObject button;
+
 
     // Start is called before the first frame update
     void Start()
     {
-    	phraseText.gameObject.SetActive(false);
+    	// phraseText.gameObject.SetActive(false);
+
+    	button.GetComponent<Image>().color = Color.red;
 
     	toggleCountdown();
         currentTime = startingTime;
@@ -48,14 +53,16 @@ public class Countdown : MonoBehaviour
     void Update()
     {
     	if (startTimer){
+    		button.GetComponent<Image>().color = Color.yellow;
     		currentTime -= 1 * Time.deltaTime;
     		countDownText.text = formatTime(currentTime);
 
     		if (currentTime <= 0){
     			currentTime = 5;
     			startTimer = false;
-    			
     		}
+    	}else{
+    		button.GetComponent<Image>().color = Color.red;
     	}
     }
 
