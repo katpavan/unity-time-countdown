@@ -53,6 +53,8 @@ public class Countdown : MonoBehaviour
 
     		if (currentTime <= 0){
     			currentTime = 5;
+    			startTimer = false;
+    			
     		}
     	}
     }
