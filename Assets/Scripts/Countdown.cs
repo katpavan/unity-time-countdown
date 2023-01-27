@@ -8,8 +8,7 @@ using TMPro;
 
 /*
 
-* the phrase doesn't update on click sometimes
-* the timer seems off, when it hits 0, the button turns red
+* the timer and button going red doesn't sync up
 
 */
 
@@ -33,7 +32,7 @@ public class Countdown : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-    	// phraseText.gameObject.SetActive(false);
+    	phraseText.gameObject.SetActive(false);
 
     	button.GetComponent<Image>().color = Color.red;
 
@@ -52,17 +51,22 @@ public class Countdown : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+    	var t = new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds();
+
     	if (startTimer){
-    		button.GetComponent<Image>().color = Color.yellow;
     		currentTime -= 1 * Time.deltaTime;
     		countDownText.text = formatTime(currentTime);
-
-    		if (currentTime <= 0){
+    		
+    		if (currentTime <= 1){
     			currentTime = 5;
     			startTimer = false;
     		}
-    	}else{
+    	}
+
+    	if ((t - lastClicked >= 5) || (clickCount == 0)){
     		button.GetComponent<Image>().color = Color.red;
+    	}else{
+    		button.GetComponent<Image>().color = Color.yellow;
     	}
     }
 
@@ -81,6 +85,7 @@ public class Countdown : MonoBehaviour
     		Debug.Log("hit while loop");
     		x = UnityEngine.Random.Range(0, 7);
     	}
+    	print($"{x} ----------- {t}");
     	phraseText.text = phrases[x];
     	//phrase code end
 
