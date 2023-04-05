@@ -30,6 +30,11 @@ public class Countdown : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        affectionScore = PlayerPrefs.GetInt("AffectionScore");
+        clickCount = PlayerPrefs.GetInt("ClickCount");
+
+        affectionScoreText.text = affectionScore.ToString();
+        
     	phraseText.gameObject.SetActive(false);
 
     	button.GetComponent<Image>().color = Color.green;
@@ -44,10 +49,6 @@ public class Countdown : MonoBehaviour
         phrases.Add(4, "you're the embodiment of perseverance");
         phrases.Add(5, "defense wins championships");
         phrases.Add(6, "don't stop, don't give up, ever");
-
-        affectionScore = PlayerPrefs.GetInt("AffectionScore");
-        clickCount = PlayerPrefs.GetInt("ClickCount");
-
     }
 
     // Update is called once per frame
