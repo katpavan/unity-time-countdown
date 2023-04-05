@@ -44,6 +44,10 @@ public class Countdown : MonoBehaviour
         phrases.Add(4, "you're the embodiment of perseverance");
         phrases.Add(5, "defense wins championships");
         phrases.Add(6, "don't stop, don't give up, ever");
+
+        affectionScore = PlayerPrefs.GetInt("AffectionScore");
+        clickCount = PlayerPrefs.GetInt("ClickCount");
+
     }
 
     // Update is called once per frame
@@ -89,6 +93,10 @@ public class Countdown : MonoBehaviour
 
     		clickCount += 1;
     		affectionScore += 10;
+
+            PlayerPrefs.SetInt("AffectionScore", affectionScore);
+            PlayerPrefs.SetInt("ClickCount", clickCount);
+            PlayerPrefs.Save();
             
     		lastClicked = t;
     		affectionScoreText.text = affectionScore.ToString();
