@@ -7,14 +7,14 @@ using TMPro;
 
 /*
 
-* the timer and button going red doesn't sync up
+* the timer and button going green doesn't sync up
 
 */
 
 public class Countdown : MonoBehaviour
 {
-	public float currentTime = 0f; 
-	public float startingTime = 5f;
+	public float timerCurrent = 0f; 
+	public float interval = 5f;
 	public bool startTimer = false;
 	public long lastClicked;
 	public int affectionScore = 0;
@@ -32,10 +32,10 @@ public class Countdown : MonoBehaviour
     {
     	phraseText.gameObject.SetActive(false);
 
-    	button.GetComponent<Image>().color = Color.red;
+    	button.GetComponent<Image>().color = Color.green;
 
     	toggleCountdown();
-        currentTime = startingTime;
+        timerCurrent = interval;
 
         phrases.Add(0, "you got heart");
         phrases.Add(1, "keep it going!");
@@ -52,19 +52,19 @@ public class Countdown : MonoBehaviour
     	var t = new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds();
 
     	if (startTimer){
-    		currentTime -= 1 * Time.deltaTime;
-    		countDownText.text = formatTime(currentTime);
+    		timerCurrent -= 1 * Time.deltaTime;
+    		countDownText.text = formatTime(timerCurrent);
     		
-    		if (currentTime <= 1){
-    			currentTime = 5;
+    		if (timerCurrent <= 1){
+    			timerCurrent = 5;
     			startTimer = false;
     		}
     	}
 
     	if ((t - lastClicked >= 5) || (clickCount == 0)){
-    		button.GetComponent<Image>().color = Color.red;
+    		button.GetComponent<Image>().color = Color.green;
     	}else{
-    		button.GetComponent<Image>().color = Color.yellow;
+    		button.GetComponent<Image>().color = Color.white;
     	}
     }
 
@@ -74,14 +74,7 @@ public class Countdown : MonoBehaviour
 
     	//phrase code start
     	phraseText.gameObject.SetActive(true);
-    	var x = UnityEngine.Random.Range(0, 7);
-    	while(x == lastPhraseKey)
-    	{	
-    		Debug.Log("hit while loop");
-    		x = UnityEngine.Random.Range(0, 7);
-    	}
-    	print($"{x} ----------- {t}");
-    	phraseText.text = phrases[x];
+
     	//phrase code end
 
     	var y = (t - lastClicked >= 5) || (clickCount == 0);
@@ -91,14 +84,27 @@ public class Countdown : MonoBehaviour
     		startTimer = true;
     		toggleCountdown();
 
+            var x = generatePhraseIndex();
+            phraseText.text = phrases[x];
+
     		clickCount += 1;
-    		affectionScore += 2;
+    		affectionScore += 10;
+            
     		lastClicked = t;
     		affectionScoreText.text = affectionScore.ToString();
-    		Debug.Log(lastClicked);
+    		// Debug.Log(lastClicked);
     	}
 
     	
+    }
+
+    public int generatePhraseIndex(){
+        var x = UnityEngine.Random.Range(0, 7);
+        while(x == lastPhraseKey)
+        {   
+            x = UnityEngine.Random.Range(0, 7);
+        }
+        return x;
     }
 
     public void toggleCountdown(){
@@ -117,6 +123,10 @@ public class Countdown : MonoBehaviour
     	var minutess = minutes < 10 ? $"0{minutes}" : minutes.ToString();
     	int seconds = (int) ct % 60;
     	var secondss = seconds < 10 ? $"0{seconds}" : seconds.ToString();
+
+    	//could get minutes hours like this too
+    	// var differenceInHours = (DateTimeOffset.Now - lastRewardedChatDate).TotalHours;
+    	// var differenceInMinutes = (DateTimeOffset.Now - lastRewardedChatDate).Minutes;
 
     	var s = $"{hours}:{minutess}:{secondss}";
     	return s;
