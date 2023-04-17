@@ -5,11 +5,37 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+
 /*
+saving player data using PlayerPefs
 
-* the timer and button going green doesn't sync up
+    used this
+    https://blog.logrocket.com/why-should-shouldnt-save-data-unitys-playerprefs/#:~:text=In%20essence%2C%20all%20we%20need,JavaScript%20Object%20Notation%20(JSON).
 
+    and 
+
+    chatgpt
+
+    https://docs.unity3d.com/ScriptReference/PlayerPrefs.html
+
+        you're limited to floats ints and strings
+
+        you can check if a key exists in it
+    
+    rundown
+
+        The PlayerPrefs class is not an ideal way to save game or per user data for a Unity project. The data types are very restrictive and data cannot be easily separated from each user. However, it is an excellent interface for saving configuration and settings information relevant to each specific application, such as resolution, quality level, default audio device, and more.
+
+        if we are on a Windows computer, we can see from the docs that PlayerPrefs entries are saved to the registry. 
+            This should be another red flag when considering saving game data with PlayerPrefs. 
+                The registry is really not used to save player data and mainly saves system and application configuration data.
+
+        PlayerPrefs is good for saving specific resolution, quality level, volume, etc
+
+used this to see how to refer to another script on the same gameobject
+    https://answers.unity.com/questions/1119537/help-how-do-i-referenceaccess-another-script-in-un.html
 */
+
 
 public class Countdown : MonoBehaviour
 {
@@ -25,16 +51,34 @@ public class Countdown : MonoBehaviour
 	[SerializeField] TextMeshProUGUI countDownText;
 	[SerializeField] TextMeshProUGUI affectionScoreText;
 	[SerializeField] TextMeshProUGUI phraseText;
+    [SerializeField] TextMeshProUGUI levelText;
 	[SerializeField] GameObject button;
 
     // Start is called before the first frame update
     void Start()
-    {
+    {   
+        //json stuff start
+        GetComponent<DataManager>().Load();
+        var jsonData = GetComponent<DataManager>().GetGameData();
+        
+        Debug.Log("var jsonData = GetComponent<DataManager>().GetGameData()");
+        Debug.Log(jsonData); 
+        //Null if nothing there
+        //(object) if something there
+        Debug.Log("var jsonData = GetComponent<DataManager>().GetGameData()");
+
+        Debug.Log("jsonData.level");
+        Debug.Log(jsonData.level);
+        Debug.Log("jsonData.level");
+
+        levelText.text = jsonData.level.ToString();
+        //json stuff end
+
         affectionScore = PlayerPrefs.GetInt("AffectionScore");
         clickCount = PlayerPrefs.GetInt("ClickCount");
 
         affectionScoreText.text = affectionScore.ToString();
-        
+
     	phraseText.gameObject.SetActive(false);
 
     	button.GetComponent<Image>().color = Color.green;
@@ -94,6 +138,18 @@ public class Countdown : MonoBehaviour
 
     		clickCount += 1;
     		affectionScore += 10;
+
+            //json stuff start
+            var levelCalculation = (int) Mathf.Round(affectionScore/200);
+            Debug.Log("var a = Mathf.Round(affectionScore/200)");
+            Debug.Log(levelCalculation);
+            Debug.Log("var a = Mathf.Round(affectionScore/200)");
+
+            levelText.text = levelCalculation.ToString();
+
+            GetComponent<DataManager>().SetLevel(levelCalculation);
+            GetComponent<DataManager>().Save();
+            //json stuff end
 
             PlayerPrefs.SetInt("AffectionScore", affectionScore);
             PlayerPrefs.SetInt("ClickCount", clickCount);
